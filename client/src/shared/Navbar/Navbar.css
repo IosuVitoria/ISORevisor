@@ -1,0 +1,33 @@
+.navbar {
+    background-color: #333;
+    padding: 1rem;
+    position: fixed; /* Fijo en la parte superior */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Para asegurarse de que esté por encima de otros elementos */
+  }
+  
+  .navbar ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar li {
+    margin: 0 1rem;
+  }
+  
+  .navbar a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: color 0.3s;
+  }
+  
+  .navbar a:hover {
+    color: #ff5733;
+  }
+  

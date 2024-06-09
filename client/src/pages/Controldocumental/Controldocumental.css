@@ -1,0 +1,44 @@
+.control-documental-container {
+    margin-top: 10% !important;
+}
+  
+  .control-documental-content {
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1),
+                -10px -10px 30px rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.5s ease;
+  }
+  
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .iso-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .iso-table th,
+  .iso-table td {
+    border: 1px solid #ddd;
+    padding: 15px;
+  }
+  
+  .iso-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .iso-table tr:hover {
+    background-color: #f9f9f9;
+  }
+  
