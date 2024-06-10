@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import './historial.css';
-import { getDocumentsSection } from '../../../../api/documentos';
+import { deleteDocument, getDocumentsSection } from '../../../../api/documentos';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Historial = ({ isOpen, onClose, section }) => {
   const [documentos, setDocumentos] = useState([]);
@@ -36,6 +37,16 @@ const Historial = ({ isOpen, onClose, section }) => {
     return <div>Loading...</div>; 
   }
 
+  const handleDeleteDocument = async (id) =>{
+    try {
+      const deleteResponse = await deleteDocument(id);
+      console.log(deleteResponse);
+      onClose();
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  }
+
   return (
     <>
       {isOpen && (
@@ -55,6 +66,7 @@ const Historial = ({ isOpen, onClose, section }) => {
                     <th>Localización</th>
                     <th>Autor</th>
                     <th>Revisor</th>
+                    <th>Eliminar</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -66,6 +78,7 @@ const Historial = ({ isOpen, onClose, section }) => {
                       <td>{doc.localizacion_documento}</td>
                       <td>{doc.autor_documento}</td>
                       <td>{doc.revisor_documento}</td>
+                      <td><DeleteIcon onClick={() => {handleDeleteDocument(doc.id)}} className='erase__button'/></td>
                     </tr>
                   ))}
                 </tbody>
@@ -82,4 +95,3 @@ const Historial = ({ isOpen, onClose, section }) => {
 };
 
 export default Historial;
-

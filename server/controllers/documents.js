@@ -85,6 +85,25 @@ const getDocumentLastRevision = async (req, res) => {
       res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
+
+
+const deleteDocument = async (req, res) => {
+    const { id } = req.body;
+    console.log(req.body);
+    console.log("Id: ", id);
+    const query = `DELETE FROM documentos_subidos WHERE id = ${id}`;
+  
+    try {
+      const DeleteResponse = await db2.query(query);
+      console.log('Documento borrado: ',DeleteResponse);
+      res.status(200).json({
+        message: 'Documento recuperada correctamente.',
+      });
+    } catch (error) {
+      console.log('Error: ', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
   
  
 module.exports = {
@@ -92,4 +111,5 @@ module.exports = {
     insertarDocumento,
     getAllDocumentsSection,
     getDocumentLastRevision,
+    deleteDocument
 }

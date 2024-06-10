@@ -68,5 +68,30 @@ export const getDocumentLastRevision = async ( nombre_documento, section) => {
       return null;
     }
 };
+
+export const deleteDocument = async (id) => {
+  try {
+    const response = await fetch(`http://${HOST}:${PORT}/documents/deleteDocument`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id })
+    });
+
+    if (response.ok) {
+      const responseData = await response.json();
+      console.log('Documento borrado correctamente:', responseData);
+      return responseData;
+    } else {
+      console.error('Error al borrar el documento:', response.statusText);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error al borrar el documento:', error);
+    return null;
+  }
+};
+
   
   

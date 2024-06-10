@@ -17,5 +17,6 @@ documentRouter.post("/getAllDocumentsSection", documentController.getAllDocument
 documentRouter.post("/getDocumentLastRevision", documentController.getDocumentLastRevision);
 
 //4º Funcionalidad: Eliminar un documento que no se necesite. Implementado en Historial.jsx
+documentRouter.delete("/deleteDocument", documentController.deleteDocument);
 
 module.exports = documentRouter;
