@@ -27,12 +27,14 @@ app.use(express.json());
 
 //Rutas requerimiento.
 const testRouter = require("./routes/test");
-const documentRouter = require("./routes/documentController")
+const documentRouter = require("./routes/documentController");
+const userRouter = require("./routes/usersController")
 
 
 //Rutas uso.
-app.use("/", testRouter)
-app.use("/documents", documentRouter)
+app.use("/", testRouter);
+app.use("/documents", documentRouter);
+app.use("/user", userRouter);
 
 
 const httpServer = http.createServer(app);
