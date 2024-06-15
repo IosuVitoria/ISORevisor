@@ -34,7 +34,7 @@ const userRouter = require("./routes/usersController")
 //Rutas uso.
 app.use("/", testRouter);
 app.use("/documents", documentRouter);
-app.use("/user", userRouter);
+app.use("/users", userRouter);
 
 
 const httpServer = http.createServer(app);

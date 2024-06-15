@@ -5,7 +5,7 @@ const test = () => {
 }
 
 const addUser = (req, res) => {
-    const { nombre, apellido, email, fechaAlta, cargo } = req.body;
+    const { nombre, apellido, email, fechaAlta, cargo } = req.body.newUser;
   
     if (!nombre || !apellido || !email || !fechaAlta || !cargo) {
       return res.status(400).json({ error: 'Rellena todos los campos' });

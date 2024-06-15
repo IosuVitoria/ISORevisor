@@ -1,13 +1,13 @@
 import { HOST, PORT } from "../config";
 
-export const addUser = async () => {
+export const addUser = async (newUser) => {
     try {
       const response = await fetch(`http://${HOST}:${PORT}/users/addUser`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        // body: JSON.stringify({datosDocumento: datosDocumento, section: section})
+        body: JSON.stringify({newUser: newUser})
       });
   
       if (response.ok) {

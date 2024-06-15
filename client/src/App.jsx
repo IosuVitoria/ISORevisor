@@ -5,6 +5,7 @@ import About from './pages/About/About';
 import Contact from './pages/Contact/Contact';
 import Controldocumental from './pages/Controldocumental/Controldocumental';
 import Navbar from './shared/Navbar/Navbar';
+import Users from './pages/Users/Users'
 import './App.css';
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/users" element={<Users />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/controldocumental" element={<Controldocumental />} />
         </Routes>
