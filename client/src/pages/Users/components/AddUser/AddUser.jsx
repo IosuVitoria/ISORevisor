@@ -21,9 +21,14 @@ const AddUser = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState('');
   const [fechaAlta, setFechaAlta] = useState('');
   const [cargo, setCargo] = useState('');
+  const [loading, setLoading] = useState(false); // Para mostrar un indicador de carga
+  const [error, setError] = useState(null); // Para mostrar errores
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+
     const newUser = {
       nombre,
       apellido,
@@ -32,22 +37,24 @@ const AddUser = ({ isOpen, onClose }) => {
       cargo,
     };
 
-    console.log(newUser);
-
     try {
-      const addUserResponse = await addUser(newUser);
-    
-      setNombre('');
-      setApellido('');
-      setEmail('');
-      setFechaAlta('');
-      setCargo('');
-      onClose();
+      const response = await addUser(newUser);
+      console.log("Response: ", response)
+      if (response.message === 'Usuario insertado correctamente') {
+        setNombre('');
+        setApellido('');
+        setEmail('');
+        setFechaAlta('');
+        setCargo('');
+        onClose();
+      } else {
+        setError('Error al agregar el usuario');
+      }
     } catch (error) {
-      console.error("Error: ", error);
+      setError('Error al agregar el usuario');
+    } finally {
+      setLoading(false);
     }
-
-    
   };
 
   return (
@@ -58,6 +65,7 @@ const AddUser = ({ isOpen, onClose }) => {
         <ModalCloseButton />
         <form onSubmit={handleSubmit}>
           <ModalBody>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             <FormControl isRequired mb={3}>
               <FormLabel>Nombre</FormLabel>
               <Input
@@ -105,7 +113,7 @@ const AddUser = ({ isOpen, onClose }) => {
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" type="submit" mr={3}>
+            <Button colorScheme="blue" type="submit" mr={3}  onClick={handleSubmit}>
               Añadir
             </Button>
             <Button variant="ghost" onClick={onClose}>Cerrar</Button>

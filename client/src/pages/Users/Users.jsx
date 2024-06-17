@@ -2,20 +2,28 @@ import React, { useEffect, useState } from 'react';
 import { FaEnvelope } from 'react-icons/fa';
 import SendEmail from './components/SendEmail/SendEmail';
 import emailjs from 'emailjs-com';
-import { ChakraProvider, Box, Table, Thead, Tbody, Tr, Th, Td, Text, Flex, Center, Button } from '@chakra-ui/react';
+import {
+  ChakraProvider,
+  Box,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Text,
+  Flex,
+  Center,
+  Button,
+} from '@chakra-ui/react';
 import AddUser from './components/AddUser/AddUser';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import { getAllUsers } from '../../api/users';
 
 const UserTable = () => {
-  const [users, setUsers] = useState([
-    { id: 1, nombre: 'Juan', apellido: 'Pérez', email: 'juan.perez@example.com', fechaAlta: '2023-01-01', cargo: 'Administrador' },
-    { id: 2, nombre: 'María', apellido: 'García', email: 'maria.garcia@example.com', fechaAlta: '2023-02-01', cargo: 'Responsable' },
-    { id: 3, nombre: 'Pedro', apellido: 'Martínez', email: 'pedro.martinez@example.com', fechaAlta: '2023-03-01', cargo: 'Técnico' },
-    { id: 4, nombre: 'Lucía', apellido: 'Fernández', email: 'lucia.fernandez@example.com', fechaAlta: '2023-04-01', cargo: 'Administrador' },
-    { id: 5, nombre: 'Carlos', apellido: 'Sánchez', email: 'carlos.sanchez@example.com', fechaAlta: '2023-05-01', cargo: 'Técnico' },
-    { id: 6, nombre: 'Ana', apellido: 'López', email: 'ana.lopez@example.com', fechaAlta: '2023-06-01', cargo: 'Responsable' }
-  ]);
-  const [loading, setLoading] = useState(false); 
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [summary, setSummary] = useState({
     total: 0,
     administrators: 0,
@@ -28,14 +36,30 @@ const UserTable = () => {
   const [AddUserModal, setAddUserModal] = useState(false);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userResponse = await getAllUsers();
+        console.log('Usuarios recuperados', userResponse);
+        setUsers(userResponse);
+        setLoading(false); // Cambiamos loading a false después de recibir los datos
+      } catch (error) {
+        console.log('Error al obtener usuarios: ', error);
+        setLoading(false); // En caso de error, también cambiamos loading a false
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
     calculateSummary(users);
   }, [users]);
 
   const calculateSummary = (users) => {
     const total = users.length;
-    const administrators = users.filter(user => user.cargo === 'Administrador').length;
-    const responsables = users.filter(user => user.cargo === 'Responsable').length;
-    const technicians = users.filter(user => user.cargo === 'Técnico').length;
+    const administrators = users.filter((user) => user.cargo === 'Administrador').length;
+    const responsables = users.filter((user) => user.cargo === 'Responsable').length;
+    const technicians = users.filter((user) => user.cargo === 'Técnico').length;
 
     setSummary({ total, administrators, responsables, technicians });
   };
@@ -59,32 +83,35 @@ const UserTable = () => {
       message,
     };
 
-    emailjs.send(
-      'YOUR_SERVICE_ID',
-      'YOUR_TEMPLATE_ID',
-      templateParams,
-      'YOUR_USER_ID'
-    ).then((response) => {
-      console.log('SUCCESS!', response.status, response.text);
-      alert('Mensaje enviado correctamente');
-      closeModal();
-    }).catch((error) => {
-      console.log('FAILED...', error);
-      alert('Error al enviar el mensaje');
-    });
+    emailjs
+      .send(
+        'YOUR_SERVICE_ID',
+        'YOUR_TEMPLATE_ID',
+        templateParams,
+        'YOUR_USER_ID'
+      )
+      .then((response) => {
+        console.log('SUCCESS!', response.status, response.text);
+        alert('Mensaje enviado correctamente');
+        closeModal();
+      })
+      .catch((error) => {
+        console.log('FAILED...', error);
+        alert('Error al enviar el mensaje');
+      });
+  };
+
+  const handleOpenAddUser = () => {
+    setAddUserModal(true);
   };
 
   if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  const handleOpenAddUser = () => {
-    setAddUserModal(true)
+    return <div>Cargando...</div>; // Muestra un indicador de carga mientras se obtienen los datos
   }
 
   return (
     <ChakraProvider>
-      <Center w="100vw" h="100vh" padding={"10%"}>
+      <Center w="100vw" h="100vh" padding={'10%'}>
         <Box
           w="100%"
           p={5}
@@ -96,11 +123,25 @@ const UserTable = () => {
             boxShadow: '12px 12px 16px #bebebe, -12px -12px 16px #ffffff',
             borderRadius: '16px',
           }}
-        > 
+        >
           <div>
-            <Text as="h3" textAlign="center" mb={8} textTransform={"uppercase"}>Tabla de Usuarios</Text>
-            <Flex>
-              <Button w={"250px"} marginBottom={"15px"} border={"2px solid black"} display={"flex"} justifyContent={"space-around"} onClick = {handleOpenAddUser}>
+            <Text
+              as="h3"
+              textAlign="center"
+              mb={8}
+              textTransform={'uppercase'}
+            >
+              Tabla de Usuarios
+            </Text>
+            <Flex justifyContent={'space-around'}>
+              <Button
+                w={'250px'}
+                marginBottom={'15px'}
+                border={'2px solid black'}
+                display={'flex'}
+                justifyContent={'space-around'}
+                onClick={handleOpenAddUser}
+              >
                 <PersonAddIcon />
                 Agregar usuario
               </Button>
@@ -140,8 +181,9 @@ const UserTable = () => {
                   <Td>{user.email}</Td>
                   <Td>{user.fechaAlta}</Td>
                   <Td>{user.cargo}</Td>
-                  <Td>
+                  <Td display={"flex"} justifyContent={"space-around"} alignItems={"center"}>
                     <FaEnvelope onClick={() => openModal(user)} style={{ cursor: 'pointer' }} />
+                    <EditNoteIcon />
                   </Td>
                 </Tr>
               ))}
@@ -159,7 +201,9 @@ const UserTable = () => {
       />
       <AddUser
         isOpen={AddUserModal}
-        onClose={() => {setAddUserModal(false)}}
+        onClose={() => {
+          setAddUserModal(false);
+        }}
       />
     </ChakraProvider>
   );
